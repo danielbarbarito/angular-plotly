@@ -21,21 +21,30 @@
 
                     var gd3= d3.select(graph);
 
-                    var setSize = function(width,height){
-                        gd3.style({
-                            width: width,
+                    function applySize(){
+                        var setSize = function(width,height){
+                            gd3.style({
+                                width: width,
 
-                            height: height
-                        })
+                                height: height
+                            })
+                         }
+                        if (scope.plotlyLayout){
+                            if ( scope.plotlyLayout.fillParent){
+                                delete scope.plotlyLayout.width;
+                                delete scope.plotlyLayout.height;
+                                setSize('100%','100%')
+
+                            }
+                            else if (scope.plotlyLayout.pctHeight || scope.plotlyLayout.pctWidth ){
+                                delete scope.plotlyLayout.width;
+                                delete scope.plotlyLayout.height;
+                                setSize(scope.plotlyLayout.pctHeight +"%", scope.plotlyLayout.pctWidth  + "%");
+                            }
+                        }
                     }
 
-                    if (scope.plotlyLayout.fillParent){
-                        setSize('100%','100%')
-                    }
-                    else if (scope.plotlyLayout.pctHeight || scope.plotlyLayout.pctWidth ){
-                        setSize(scope.plotlyLayout.pctHeight +"%", scope.plotlyLayout.pctWidth  + "%");
-                    }
-
+                    applySize();
                     var gd = gd3.node();
                     graph = gd;
                     var initialized = false;
@@ -56,6 +65,7 @@
                         //If this is the first run with data, initialize
                         if (!initialized) {
                             initialized = true;
+                            applySize();
                             Plotly.newPlot(graph, scope.plotlyData, scope.plotlyLayout, scope.plotlyOptions);
                             if (scope.plotlyEvents){
                               subscribeToEvents(graph);
@@ -63,13 +73,14 @@
                         }
                         graph.layout = scope.plotlyLayout;
                         graph.data = scope.plotlyData;
+                        applySize();
                         Plotly.redraw(graph);
                         Plotly.Plots.resize(graph);
                     }
 
                     function onResize() {
                         if (!(initialized && scope.plotlyData)) return;
-                        
+                        applySize();
                         Plotly.Plots.resize(graph);
                     }
 
