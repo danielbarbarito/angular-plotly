@@ -45,6 +45,11 @@ Open the following url:
 http://127.0.0.1:8000/example/index.html
 ```
 
+## Special Layout options:
+```fillParent``` - will set the chart to be 100% height and width of the parent
+```pctHeight, pctWidth ``` - height and width of parent in percent. 
+
+
 ## Optional Event Subscription:
 
 Plotly can also be initialized with `plotly-events`
