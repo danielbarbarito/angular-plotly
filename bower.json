@@ -13,12 +13,13 @@
         "visualization"
     ],
     "authors": [
-        "Alon Horev"
+        "Alon Horev",
+        "Roy Zahut"
     ],
-    "homepage": "https://github.com/alonho/angular-plotly",
+    "homepage": "https://github.com/roy27787/angular-plotly",
     "repository": {
         "type": "git",
-        "url": "http://alonho.github.io/angular-plotly.git"
+        "url": "https://github.com/roy27787/angular-plotly.git"
     },
     "dependencies": {
         "angular": "^1.x",
