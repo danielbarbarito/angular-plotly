@@ -10,11 +10,34 @@
                     plotlyData: '=',
                     plotlyLayout: '=',
                     plotlyOptions: '=',
-                    plotlyEvents: '=',
-                    plotlyManualDataUpdate: '='
+                    plotlyEvents: '='
                 },
                 link: function(scope, element) {
+                    
+                    
+                    
+                    var element0 = element[0];
                     var graph = element[0].children[0];
+
+                    var gd3= d3.select(graph);
+
+                    var setSize = function(width,height){
+                        gd3.style({
+                            width: width,
+
+                            height: height
+                        })
+                    }
+
+                    if (scope.plotlyLayout.fillParent){
+                        setSize('100%','100%')
+                    }
+                    else if (scope.plotlyLayout.pctHeight || scope.plotlyLayout.pctWidth ){
+                        setSize(scope.plotlyLayout.pctHeight +"%", scope.plotlyLayout.pctWidth  + "%");
+                    }
+
+                    var gd = gd3.node();
+                    graph = gd;
                     var initialized = false;
 
                     function subscribeToEvents(graph) {
@@ -46,6 +69,7 @@
 
                     function onResize() {
                         if (!(initialized && scope.plotlyData)) return;
+                        
                         Plotly.Plots.resize(graph);
                     }
 
@@ -58,8 +82,7 @@
                             onUpdate();
                         }, true);
 
-                    if (!scope.plotlyManualDataUpdate) {
-                        scope.$watch(
+                   scope.$watch(
                             function(scope) {
                                 return scope.plotlyData;
                             },
@@ -67,14 +90,6 @@
                                 if (angular.equals(newValue, oldValue) && initialized) return;
                                 onUpdate();
                             }, true);
-                    }
-
-                    /**
-                     * Listens to 'tracesUpdated' event broadcasted from controller to update plot.
-                     */
-                    scope.$on('tracesUpdated', function () {
-                        onUpdate();
-                    });
 
                     scope.$watch(function() {
                         return {
